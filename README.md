@@ -1,2 +1,1 @@
-# tenifni.github.io
-personal website
+personal website. Pure HTML gold.
