@@ -1,1 +1,1 @@
-personal website. Pure HTML gold.
+personal website. Pure HTML goodness.
