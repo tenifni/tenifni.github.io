@@ -1,63 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Where Is Scarlett</title>
-    <!-- Google website registered -->
-    <meta name="google-site-verification" content="OwTswRpKuSD8Bs-fiD3aTgKq1ecKKlW0iLixQH4pWkA" />
-    <!--Traced by Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-133763058-1"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Where Is Scarlett (v2)</title>
+    <!-- Tailwind CSS for clean typography and layout -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #0f172a; /* Dark slate background */
+            color: #f8fafc;
         }
-        gtag('js', new Date());
+        .status-card {
+            border-left: 4px solid #0e5611;
+        }
+        .label {
 
-        gtag('config', 'UA-133763058-1');
-    </script>
-
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #94a3b8;
+            margin-bottom: 0.25rem;
+        }
+    </style>
 </head>
+<body class="min-h-screen flex flex-col justify-center items-center p-6">
 
-<body>
-    <div id="main">
-        <div id="header">
+    <div class="w-full max-w-2xl">
+        <!-- Main Status Display -->
+        <div class="space-y-16">
+            
+            <!-- Location Section -->
+            <section class="status-card pl-6">
+                <p class="label">Current Location</p>
+                <h1 id="location-text" class="text-5xl md:text-3xl font-bold tracking-tight mb-2">
+                    <!-- Location goes here -->
 
-            <h1> Where is Scarlett?
-                <!--<img src="", height="100" align="bottom" hspace="20">-->
+                </h1>
+                <div class="flex flex-col space-y-1">
+                    <p id="duration-text" class="text-xl md:text-1xl text-blue-300 "> <!-- font-medium italic -->
+                        <!-- Duration -->
+                    </p>
+                    <p id="comment-text" class="text-sm md:text-base text-slate-400">
+                        <!-- Optional comment -->
+                    </p>
+                </div>
+            </section>
 
-            </h1>
-            <h4> Pierce 320 </h4>
-
-            <tt>Last updated: 2023-01-28 4:00PM ET
-            <!--<span id='date-time'></span> -->
-            </tt>
-
-
-
+            <!-- Timing/Next Stop Section -->
+            <section class="status-card pl-6">
+                <p class="label">Next Stop</p>
+                <p id="next-text" class="text-2xl md:text-2xl font-light text-slate-300">
+                    <!-- Next stop-->
+                </p>
+            </section>
 
 
-
-
-            <!-- <h3><center><a href="index.html">Back to Top</a></center></h3> -->
         </div>
+
+        <!-- Footer -->
+        <footer class="mt-24 pt-8 border-t border-slate-800 flex justify-between items-end text-slate-500 text-sm">
+            <div>
+                <p class="label !mb-0">Last Updated</p>
+                <p id="last-updated">--</p>
+            </div>
+            <div class="text-right">
+                <!-- <p class="font-bold text-slate-400">Status Dashboard</p> -->
+                <!-- <p>v2.2 Detailed Text</p> -->
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        /**
+         * 📝 EDIT STATUS 
+         */
+        const USER_STATUS = {
+            location: "Hayden residence",
+            duration: "Until 4p",
+            comment: "contact: email",
+            nextStop: "Lyman",
+            updated: "Jul, 2:30 PM"
+        };
+
+        // This function injects your text into the website
+        function updateDisplay() {
+            document.getElementById('location-text').innerText = USER_STATUS.location;
+            document.getElementById('duration-text').innerText = USER_STATUS.duration;
+            document.getElementById('comment-text').innerText = USER_STATUS.comment;
+            document.getElementById('next-text').innerText = USER_STATUS.nextStop;
+            document.getElementById('last-updated').innerText = USER_STATUS.updated;
+        }
+
+        window.onload = updateDisplay;
+
+    </script>
 </body>
-
-<style>
-    nav.a {
-        word-spacing: 15px;
-        background-color: lightpink;
-        /*text-align: center;*/
-    }
-</style>
-
-<script>
-    function LastUpdated() {
-        var x = document.lastModified;
-        document.getElementById("LastUpdated").innerHTML = x;
-    }
-
-
-    var dt = new Date();
-    document.getElementById('date-time').innerHTML = dt;
-</script>
-
 </html>
+
+
