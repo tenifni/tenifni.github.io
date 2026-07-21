@@ -69,6 +69,58 @@
             border: 1px solid #808080;
         }
 
+        /*  Input & Button Styling */
+        .retro-input {
+            width: 95%;
+            padding: 4px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 2px inset #ffffff;
+            background-color: #ffffff;
+            font-family: Arial, sans-serif;
+            font-size: 13px;
+            color: #000000;
+        }
+
+        .retro-input:focus {
+            outline: none;
+        }
+
+        .retro-button {
+            background-color: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            padding: 4px 15px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            font-weight: bold;
+            color: #000000;
+            cursor: pointer;
+        }
+
+        .retro-button:active {
+            border-color: #808080 #ffffff #ffffff #808080;
+            padding: 5px 14px 3px 16px;
+        }
+
+        /*  Status Notification Display */
+        #form-status {
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+            padding: 4px;
+            display: none;
+            border: 1px solid #808080;
+        }
+        .status-success {
+            background-color: #008000;
+            color: #ffffff;
+        }
+        .status-error {
+            background-color: #cc0000;
+            color: #ffffff;
+        }
+
         .footer {
             margin-top: 10px;
             font-size: 11px;
@@ -94,12 +146,31 @@
             </div>
 
             <!-- Next Stop Section -->
-
-            <div class="section" style="margin-bottom: 5px;">
+            <div class="section">
                 <span class="label">Next Stop (if weather permits)</span>
                 <div class="marquee-box">
                     <marquee id="next-text" scrollamount="3">--</marquee>
                 </div>
+            </div>
+
+            <!--  Message Feature Section -->
+            <div class="section" style="margin-bottom: 5px;">
+                <span class="label">Transmit Short Message</span>
+                <form id="retro-form" action="https://web3forms.com" method="POST">
+                    
+                   
+                    <input type="hidden" name="access_key" value="f6cc6504-bba0-4310-9bfc-77638f12079b">
+                    <input type="checkbox" name="botcheck" style="display: none;">
+
+                    <input type="text" name="message" class="retro-input" placeholder="Type transmission here..." maxlength="140" required>
+                    
+                    <div style="text-align: right;">
+                        <button type="submit" id="submit-btn" class="retro-button">Send</button>
+                    </div>
+                </form>
+                
+                <!-- Notification Element -->
+                <div id="form-status"></div>
             </div>
 
             <div class="footer">
@@ -125,9 +196,49 @@
             document.getElementById('last-updated').innerText = USER_STATUS.updated;
         }
 
+        // Handle Background Submissions smoothly via JavaScript
+        document.getElementById('retro-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const button = document.getElementById('submit-btn');
+            const statusDiv = document.getElementById('form-status');
+            
+            button.disabled = true;
+            button.innerText = "Sending...";
+            statusDiv.style.display = "none";
+            
+            const formData = new FormData(form);
+            
+            fetch(form.action, {
+                method: form.method,
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    statusDiv.innerText = "TRANSMISSION SUCCESSFUL.";
+                    statusDiv.className = "status-success";
+                    statusDiv.style.display = "block";
+                    form.reset();
+                } else {
+                    throw new Error();
+                }
+            })
+            .catch(error => {
+                statusDiv.innerText = "TRANSMISSION FAILED.";
+                statusDiv.className = "status-error";
+                statusDiv.style.display = "block";
+            })
+            .finally(() => {
+                button.disabled = false;
+                button.innerText = "Send";
+            });
+        });
+
         window.onload = updateDisplay;
     </script>
 </body>
 </html>
-
-
