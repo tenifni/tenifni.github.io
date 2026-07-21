@@ -3,99 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Where Is Scarlett (v2)</title>
-    <!-- Tailwind CSS for clean typography and layout -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>Where</title>
     <style>
+        /* Streamlined 90s Aesthetic */
         body {
-            font-family: 'Space Grotesk', sans-serif;
-            background-color: #0f172a; /* Dark slate background */
-            color: #f8fafc;
+            background-color: #008080; /* Classic Teal Desktop */
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 40px 20px;
         }
-        .status-card {
-            border-left: 4px solid #0e5611;
-        }
-        .label {
 
-            font-size: 0.75rem;
+        .container {
+            background-color: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff; /* Classic Bevel */
+            max-width: 450px;
+
+            margin: 0 auto;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+        }
+
+        /* Simple Blue Header Bar */
+        .header-bar {
+            background-color: #000080;
+            color: #ffffff;
+            padding: 4px 8px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .section {
+            border: 1px inset #ffffff;
+
+            background-color: #d4d4d4;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin: 5px 0;
+            color: #000;
+        }
+
+        .label {
+            font-size: 11px;
+            font-weight: bold;
+            color: #000080;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: #94a3b8;
-            margin-bottom: 0.25rem;
+            display: block;
+        }
+
+
+        .duration {
+            color: #cc0000;
+            font-weight: bold;
+        }
+
+        /* Small touch of 90s motion */
+        .marquee-box {
+            background-color: #000;
+            color: #00ff00;
+            padding: 4px;
+            font-family: 'Courier New', monospace;
+            border: 1px solid #808080;
+        }
+
+        .footer {
+            margin-top: 10px;
+            font-size: 11px;
+            color: #444;
+            border-top: 1px solid #808080;
+
+            padding-top: 5px;
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-center items-center p-6">
+<body>
 
-    <div class="w-full max-w-2xl">
-        <!-- Main Status Display -->
-        <div class="space-y-16">
-            
+    <div class="container">
+        <div class="header-bar">whereisscarlett.EXE</div>
+        
+        <div class="content">
             <!-- Location Section -->
-            <section class="status-card pl-6">
-                <p class="label">Current Location</p>
-                <h1 id="location-text" class="text-5xl md:text-3xl font-bold tracking-tight mb-2">
-                    <!-- Location goes here -->
+            <div class="section">
+                <span class="label">Current Location</span>
+                <h1 id="location-text">--</h1>
+                <div id="duration-text" class="duration">--</div>
+                <div id="comment-text" style="font-size: 12px; margin-top: 5px;">--</div>
+            </div>
 
-                </h1>
-                <div class="flex flex-col space-y-1">
-                    <p id="duration-text" class="text-xl md:text-1xl text-blue-300 "> <!-- font-medium italic -->
-                        <!-- Duration -->
-                    </p>
-                    <p id="comment-text" class="text-sm md:text-base text-slate-400">
-                        <!-- Optional comment -->
-                    </p>
+            <!-- Next Stop Section -->
+
+            <div class="section" style="margin-bottom: 5px;">
+                <span class="label">Next Destination</span>
+                <div class="marquee-box">
+                    <marquee id="next-text" scrollamount="3">--</marquee>
                 </div>
-            </section>
+            </div>
 
-            <!-- Timing/Next Stop Section -->
-            <section class="status-card pl-6">
-                <p class="label">Next Stop</p>
-                <p id="next-text" class="text-2xl md:text-2xl font-light text-slate-300">
-                    <!-- Next stop-->
-                </p>
-            </section>
-
-
+            <div class="footer">
+                <b>Last Update:</b> <span id="last-updated">--</span>
+            </div>
         </div>
-
-        <!-- Footer -->
-        <footer class="mt-24 pt-8 border-t border-slate-800 flex justify-between items-end text-slate-500 text-sm">
-            <div>
-                <p class="label !mb-0">Last Updated</p>
-                <p id="last-updated">--</p>
-            </div>
-            <div class="text-right">
-                <!-- <p class="font-bold text-slate-400">Status Dashboard</p> -->
-                <!-- <p>v2.2 Detailed Text</p> -->
-            </div>
-        </footer>
     </div>
 
     <script>
-        /**
-         * 📝 EDIT STATUS 
-         */
         const USER_STATUS = {
-            location: "Hayden residence",
-            duration: "Until 4p",
+            location: "Hayden Residence",
+            duration: "Until 4:30 PM",
             comment: "contact: email",
             nextStop: "Lyman",
-            updated: "Jul, 2:30 PM"
+            updated: "Jul 21, 2:30 PM"
         };
 
-        // This function injects your text into the website
         function updateDisplay() {
             document.getElementById('location-text').innerText = USER_STATUS.location;
             document.getElementById('duration-text').innerText = USER_STATUS.duration;
             document.getElementById('comment-text').innerText = USER_STATUS.comment;
-            document.getElementById('next-text').innerText = USER_STATUS.nextStop;
+            document.getElementById('next-text').innerText = ">>> " + USER_STATUS.nextStop.toUpperCase() + " <<<";
             document.getElementById('last-updated').innerText = USER_STATUS.updated;
         }
 
         window.onload = updateDisplay;
-
     </script>
 </body>
 </html>
