@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html colspan="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,8 +16,8 @@
             border: 2px solid;
             border-color: #ffffff #808080 #808080 #ffffff; /* Bevel */
             max-width: 450px;
-
             margin: 0 auto;
+
             box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
         }
 
@@ -36,8 +36,8 @@
 
         .section {
             border: 1px inset #ffffff;
-
             background-color: #d4d4d4;
+
             padding: 15px;
             margin-bottom: 20px;
         }
@@ -56,11 +56,12 @@
             display: block;
         }
 
-
         .duration {
+
             color: #cc0000;
             font-weight: bold;
         }
+
         .marquee-box {
             background-color: #000;
             color: #00ff00;
@@ -76,6 +77,7 @@
             margin-top: 5px;
             margin-bottom: 10px;
             border: 2px inset #ffffff;
+
             background-color: #ffffff;
             font-family: Arial, sans-serif;
             font-size: 13px;
@@ -95,6 +97,7 @@
             font-size: 12px;
             font-weight: bold;
             color: #000000;
+
             cursor: pointer;
         }
 
@@ -103,12 +106,27 @@
             padding: 5px 14px 3px 16px;
         }
 
+        .retro-button:disabled {
+            color: #808080;
+            cursor: not-allowed;
+        }
+
+        #result-message {
+            margin-top: 10px;
+            font-size: 12px;
+            font-weight: bold;
+            display: none;
+            padding: 5px;
+
+            border: 1px solid #808080;
+            background: #eee;
+        }
+
         .footer {
             margin-top: 10px;
             font-size: 11px;
             color: #444;
             border-top: 1px solid #808080;
-
             padding-top: 5px;
         }
     </style>
@@ -119,6 +137,7 @@
         <div class="header-bar">whereisscarlett</div>
         
         <div class="content">
+
             <!-- Location Section -->
             <div class="section">
                 <span class="label">Current Location</span>
@@ -138,7 +157,9 @@
             <!-- Message Feature Section -->
             <div class="section" style="margin-bottom: 5px;">
                 <span class="label">Leave A Message</span>
-                <form action="https://api.web3forms.com/submit" method="POST">
+
+                <!-- Added ID for JavaScript targeting -->
+                <form id="transmission-form" action="https://api.web3forms.com/submit" method="POST">
                     
                     <!-- Web3Forms API Key Config -->
                     <input type="hidden" name="access_key" value="f6cc6504-bba0-4310-9bfc-77638f12079b">
@@ -147,12 +168,16 @@
                     <input type="text" name="message" class="retro-input" placeholder="Type transmission here..." maxlength="140" required>
                     
                     <div style="text-align: right;">
-                        <button type="submit" class="retro-button">Send</button>
+                        <!-- Added ID for button targeting -->
+                        <button type="submit" id="submit-btn" class="retro-button">Send</button>
                     </div>
                 </form>
+                <!-- Container for success/fail messages -->
+                <div id="result-message"></div>
             </div>
 
             <div class="footer">
+
                 <b>Last Update:</b> <span id="last-updated">--</span>
             </div>
         </div>
@@ -172,10 +197,67 @@
             document.getElementById('duration-text').innerText = USER_STATUS.duration;
             document.getElementById('comment-text').innerText = USER_STATUS.comment;
             document.getElementById('next-text').innerText = ">>> " + USER_STATUS.nextStop.toUpperCase() + " <<<";
+
             document.getElementById('last-updated').innerText = USER_STATUS.updated;
         }
+
+        // Handle Form Submission via AJAX
+        const form = document.getElementById('transmission-form');
+        const resultDiv = document.getElementById('result-message');
+        const submitBtn = document.getElementById('submit-btn');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerText = "Sending...";
+            resultDiv.style.display = "none";
+
+            const formData = new FormData(form);
+            const object = Object.fromEntries(formData);
+            const json = JSON.stringify(object);
+
+
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: json
+            })
+            .then(async (response) => {
+                if (response.status === 200) {
+                    // Success Case
+                    form.style.display = "none";
+                    resultDiv.style.display = "block";
+                    resultDiv.style.color = "#008000"; // Green for success
+                    resultDiv.innerText = "✓ TRANSMISSION SUCCESSFUL";
+                } else {
+                    // Fail Case (API error)
+                    const errorData = await response.json();
+                    resultDiv.style.display = "block";
+
+                    resultDiv.style.color = "#cc0000";
+                    resultDiv.innerText = "TRANSMISSION FAILED: " + (errorData.message || "Error");
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "Send";
+                }
+            })
+            .catch(error => {
+                // Fail Case (Network error)
+                console.error(error);
+                resultDiv.style.display = "block";
+                resultDiv.style.color = "#cc0000";
+                resultDiv.innerText = "TRANSMISSION FAILED: System Offline";
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Send";
+            });
+        });
 
         window.onload = updateDisplay;
     </script>
 </body>
 </html>
+
